@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group list</title>
+</head>
+<body>
+<form>
+  <label for="group_name">Group num:</label><br>
+    <input type="text" id="group_name" name="group_name"><br>
+    <input type="submit" value="Search"><br>
+</form>
+{{ group_list|safe }}
+</body>
+</html>
