@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from student.models import Student
 from django.http import HttpResponse
@@ -10,21 +11,15 @@ def gen_student(request):
     return HttpResponse(f"you create {c} students")
 
 def students_list(request):
-    qs0 = Student.objects.all()
+    filters = Q()
 
-    if request.GET.get("lname"):
-        qs1 = qs0.filter(last_name=request.GET.get("lname"))
-    else:
-        qs1 = qs0.none()
     if request.GET.get("fname"):
-        qs2 = qs0.filter(first_name=request.GET.get("fname"))
-    else:
-        qs2 = qs0.none()
+        filters |= Q(first_name=request.GET.get("fname"))
+    if request.GET.get("lname"):
+        filters |= Q(last_name=request.GET.get("lname"))
     if request.GET.get("email"):
-        qs3 = qs0.filter(email=request.GET.get("email"))
-    else:
-        qs3 = qs0.none()
-    qs = qs1.union(qs2, qs3, qs1)
+        filters |= Q(last_name=request.GET.get("email"))
+    qs = Student.objects.filter(filters)
     result = "<br>".join(
         str(student)
         for student in qs
