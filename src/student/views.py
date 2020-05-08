@@ -10,10 +10,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 def gen_student(request):
     c = 0
-    for i in range(int(request.GET.get("count",0))):
+    for i in range(int(request.GET.get("count", 0))):
         c += 1
         Student.gen_student()
     return HttpResponse(f"you create {c} students")
+
 
 def students_list(request):
     filters = Q()
@@ -35,6 +36,7 @@ def students_list(request):
         context={'students_list': result}
     )
 
+
 def students_add(request):
     qs = Student.objects.all()
     qs = qs.filter(first_name=request.POST.get("first_name")
@@ -51,7 +53,7 @@ def students_add(request):
                 form.save()
                 return HttpResponseRedirect(reverse('student'))
         else:
-            return HttpResponse('Этот студент уже существует, попробуйте ещё раз ')
+            return HttpResponse('Этот студент уже существует, попробуйте ещё раз ', status=409)
     else:
         form = StudentAddForm()
 

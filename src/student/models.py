@@ -11,19 +11,19 @@ class Student(models.Model):
     last_name = models.CharField(max_length=25, null=False)
     email = models.EmailField(max_length=40, null=True)
     birthdate = models.DateField(default=datetime.date.today)
-    phone_number = models.IntegerField(max_length=10, default=0000000000, null=False )
+    phone_number = models.CharField(max_length=14, null=False)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} {self.email} +380-{self.phone_number}'
+        return f'{self.first_name} {self.last_name} {self.email} {self.phone_number}'
 
     @classmethod
     def gen_student(cls):
         faker = Faker()
 
         student = cls(
-            first_name = faker.first_name(),
-            last_name = faker.last_name(),
-            email = faker.email(),
-            phone_number = faker.pyint(min_value=0, max_value=9999999999, step=1)
+            first_name=faker.first_name(),
+            last_name=faker.last_name(),
+            email=faker.email(),
+            phone_number=faker.phone_number()
         )
         student.save()

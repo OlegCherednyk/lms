@@ -22,6 +22,7 @@ def group_list(request):
         context={'group_list': result}
     )
 
+
 def groups_add(request):
 
     if request.method == 'POST':

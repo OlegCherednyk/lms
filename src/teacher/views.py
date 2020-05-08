@@ -27,6 +27,7 @@ def teacher_list(request):
         context={'teacher_list': result}
     )
 
+
 def teachers_add(request):
 
     if request.method == 'POST':
