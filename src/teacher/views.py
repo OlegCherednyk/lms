@@ -1,6 +1,10 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
+from django.urls import reverse
+
+from teacher.forms import TeacherAddForm
 from teacher.models import Teacher
 
 
@@ -21,4 +25,21 @@ def teacher_list(request):
         request=request,
         template_name="teacher_list.html",
         context={'teacher_list': result}
+    )
+
+
+def teachers_add(request):
+
+    if request.method == 'POST':
+        form = TeacherAddForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('teacher'))
+    else:
+        form = TeacherAddForm()
+
+    return render(
+        request=request,
+        template_name="teachers_add.html",
+        context={'form': form}
     )
