@@ -7,3 +7,15 @@ class StudentAddForm(ModelForm):
     class Meta:
         model = Student
         fields = "__all__"
+
+
+class StudentEditForm(ModelForm):
+    class Meta:
+        model = Student
+        fields = "__all__"
+
+
+class StudentDelForm(ModelForm):
+    class Meta:
+        model = Student
+        fields = "__all__"
