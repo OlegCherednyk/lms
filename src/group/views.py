@@ -12,7 +12,7 @@ from group.models import Group
 def group_list(request):
     qs = Group.objects.all()
     if request.GET.get("group_name"):
-        qs = qs.filter(last_name=request.GET.get("group_name"))
+        qs = qs.filter(group_num=request.GET.get("group_name"))
     return render(
         request=request,
         template_name="group_list.html",
