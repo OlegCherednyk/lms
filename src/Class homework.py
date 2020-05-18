@@ -100,11 +100,11 @@ class Circle(Shape):
         super().__init__(x, y)
         self.rad = rad
 
-    def check(self, other):
-        if math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2) < self.rad:
-            print("Точка в окружности")
+    def intersect(self, point):
+        if math.sqrt((self.x - point.x)**2 + (self.y - point.y)**2) < self.rad:
+            return True
         else:
-            print("Точка не в окружности")
+            return False
 
 
 #a = Dot(100, 3)
@@ -120,9 +120,9 @@ class Transport:
 
     def check_speed(self):
         if self.m_speed <= 100:
-            return 'Грустно'
+            return True
         else:
-            return 'Не грустно'
+            return False
 
 
 class Train(Transport):
@@ -131,7 +131,7 @@ class Train(Transport):
         self.intercity = intercity
 
     def check_intercity(self):
-        if self.check_speed() == 'Грустно':
+        if self.check_speed():
             self.intercity = False
 
 
