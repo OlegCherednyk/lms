@@ -145,3 +145,67 @@ class Plane(Transport):
             print("Большой самолет")
         else:
             print("Не очень большой самолет")
+
+
+
+
+class RangeInteger:
+    def __init__(self, name, min_value, max_value, initval=None):
+        self.val = initval
+        self.name = name
+        self.min_value = min_value
+        self.max_value = max_value
+
+    def __get__(self, obj , objtype):
+        return obj.__dict__[self.name]
+
+    def __set__(self, obj, val):
+        if val < self.min_value or val > self.max_value:
+            raise ValueError("Значение не входит в диапазон")
+        else:
+            self.val = val
+            obj.__dict__[self.name] = val
+
+    def __del__(self):
+        self.val = None
+
+
+class Employee:
+
+    kpi_score = RangeInteger(name='kpi_score', min_value=0, max_value=100)
+
+    def __init__(self, first_name=None, last_name=None, email=None):
+        self._first_name = first_name
+        self._last_name = last_name
+        self._email = email
+
+    def __bool__(self):
+        return bool(self._first_name or \
+                    self._last_name or \
+                    self._email)
+
+
+e = Employee()
+e.kpi_score = 100
+
+
+def once(f):
+    def fun(*args, **kwargs):
+
+        if not hasattr(fun, '_s'):
+            fun._s = 1
+            fun.result = f()
+
+        else:
+            fun.result = fun.result
+        return fun.result
+    return fun
+
+
+@once
+def get_logger():
+    return [1, 2, 3] * 2
+
+
+assert id(get_logger()) == id(get_logger()), "Not equal"
+print('SUCCESS!')
