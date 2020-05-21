@@ -1,10 +1,11 @@
 from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
 
-from student.forms import StudentAddForm
+from student.forms import StudentAddForm, StudentEditForm, StudentDelForm
 from student.models import Student
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 
 
 # Create your views here.
@@ -26,14 +27,12 @@ def students_list(request):
     if request.GET.get("email"):
         filters |= Q(last_name=request.GET.get("email"))
     qs = Student.objects.filter(filters)
-    result = "<br>".join(
-        str(student)
-        for student in qs
-    )
     return render(
         request=request,
         template_name="student_list.html",
-        context={'students_list': result}
+        context={'students_list': qs,
+                 'title': 'Student list'
+                 }
     )
 
 
@@ -60,5 +59,55 @@ def students_add(request):
     return render(
         request=request,
         template_name="students_add.html",
-        context={'form': form}
+        context={'form': form,
+                 'title': 'Add student'
+                 }
+    )
+
+
+def students_edit(request, id):
+    try:
+        student = Student.objects.get(id=id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound("Student with this id not exist ")
+    if request.method == 'POST':
+        form = StudentEditForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('student'))
+        else:
+            return HttpResponse('Этот студент уже существует, попробуйте ещё раз ', status=409)
+    else:
+        form = StudentEditForm(
+            instance=student
+        )
+    return render(
+        request=request,
+        template_name="students_edit.html",
+        context={'form': form,
+                 'title': 'Edit student'
+                 }
+    )
+
+
+def del_students(request):
+    filters = Q()
+
+    if request.GET.get("fname"):
+        filters |= Q(first_name=request.GET.get("fname"))
+    if request.GET.get("lname"):
+        filters |= Q(last_name=request.GET.get("lname"))
+    if request.GET.get("email"):
+        filters |= Q(last_name=request.GET.get("email"))
+    qs = Student.objects.filter(filters)
+    if request.method == "POST":
+        qs.delete()
+        return HttpResponseRedirect(reverse('student'))
+    return render(
+        request=request,
+        template_name="students_del.html",
+        context={
+            'del_list': qs,
+            'title': 'Delete some students'
+        }
     )
