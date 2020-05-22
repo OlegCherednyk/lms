@@ -147,9 +147,7 @@ class Plane(Transport):
             print("Не очень большой самолет")
 
 
-
-
-class RangeInteger:
+class DescriptorRange:
     def __init__(self, name, min_value, max_value, initval=None):
         self.val = initval
         self.name = name
@@ -170,9 +168,35 @@ class RangeInteger:
         self.val = None
 
 
+class Typed(DescriptorRange):
+    type_ = object
+
+    def __set__(self, instance, value):
+        if not isinstance(value, self.type_):
+            raise TypeError('Expected %s' % self.type_)
+        super().__set__(instance, value)
+
+
+class Integer(Typed):
+    type_ = int
+
+
+class Float(Typed):
+    type_ = float
+
+
+class RangeInteger(Integer, DescriptorRange):
+    pass
+
+
+class RangeFloat(Float, DescriptorRange):
+    pass
+
+
 class Employee:
 
     kpi_score = RangeInteger(name='kpi_score', min_value=0, max_value=100)
+    kpi_score2 = RangeFloat(name='kpi_score2', min_value=0, max_value=100)
 
     def __init__(self, first_name=None, last_name=None, email=None):
         self._first_name = first_name
@@ -187,13 +211,13 @@ class Employee:
 
 e = Employee()
 e.kpi_score = 100
-
+e.kpi_score2 = 99.9
 
 def once(f):
     def fun(*args, **kwargs):
 
-        if not hasattr(fun, '_s'):
-            fun._s = 1
+        if not hasattr(fun, '_try'):
+            fun._try = 1
             fun.result = f()
 
         else:
