@@ -6,5 +6,24 @@
      {{ form.as_p }}
     <input type="submit" value="Save"><br>
     </form>
-{%endblock%}
+{% if teacher.group.all %}
+    <table border="1px">
+        <tr>
+          <th>ID</th>
+          <th>Group name</th>
+            <th>✏</th>
+        </tr>
+        {% for group in teacher.group.all %}
+            <tr>
+              <td> {{ group.id }}</td>
+              <td> {{ group.group_num }}</td>
 
+              <td> <a href="/group/edit/{{ group.id }}">EDIT</a></td>
+
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>Sorry, list is empty</p>
+{% endif %}
+{%endblock%}

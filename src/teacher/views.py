@@ -66,6 +66,7 @@ def teachers_edit(request, id):
         request=request,
         template_name="teacher_edit.html",
         context={'form': form,
+                 'teacher': teacher,
                  'title': 'Edit teacher'
                  }
     )

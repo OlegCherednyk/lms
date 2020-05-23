@@ -26,7 +26,7 @@ def students_list(request):
         filters |= Q(last_name=request.GET.get("lname"))
     if request.GET.get("email"):
         filters |= Q(last_name=request.GET.get("email"))
-    qs = Student.objects.filter(filters)
+    qs = Student.objects.filter(filters).select_related("group")
     return render(
         request=request,
         template_name="student_list.html",
