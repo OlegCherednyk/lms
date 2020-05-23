@@ -145,3 +145,91 @@ class Plane(Transport):
             print("Большой самолет")
         else:
             print("Не очень большой самолет")
+
+
+class DescriptorRange:
+    def __init__(self, name, min_value, max_value, initval=None):
+        self.val = initval
+        self.name = name
+        self.min_value = min_value
+        self.max_value = max_value
+
+    def __get__(self, obj , objtype):
+        return obj.__dict__[self.name]
+
+    def __set__(self, obj, val):
+        if val < self.min_value or val > self.max_value:
+            raise ValueError("Значение не входит в диапазон")
+        else:
+            self.val = val
+            obj.__dict__[self.name] = val
+
+    def __del__(self):
+        self.val = None
+
+
+class Typed(DescriptorRange):
+    type_ = object
+
+    def __set__(self, instance, value):
+        if not isinstance(value, self.type_):
+            raise TypeError('Expected %s' % self.type_)
+        super().__set__(instance, value)
+
+
+class Integer(Typed):
+    type_ = int
+
+
+class Float(Typed):
+    type_ = float
+
+
+class RangeInteger(Integer, DescriptorRange):
+    pass
+
+
+class RangeFloat(Float, DescriptorRange):
+    pass
+
+
+class Employee:
+
+    kpi_score = RangeInteger(name='kpi_score', min_value=0, max_value=100)
+    kpi_score2 = RangeFloat(name='kpi_score2', min_value=0, max_value=100)
+
+    def __init__(self, first_name=None, last_name=None, email=None):
+        self._first_name = first_name
+        self._last_name = last_name
+        self._email = email
+
+    def __bool__(self):
+        return bool(self._first_name or \
+                    self._last_name or \
+                    self._email)
+
+
+e = Employee()
+e.kpi_score = 100
+e.kpi_score2 = 99.9
+
+def once(f):
+    def fun(*args, **kwargs):
+
+        if not hasattr(fun, '_try'):
+            fun._try = 1
+            fun.result = f()
+
+        else:
+            fun.result = fun.result
+        return fun.result
+    return fun
+
+
+@once
+def get_logger():
+    return [1, 2, 3] * 2
+
+
+assert id(get_logger()) == id(get_logger()), "Not equal"
+print('SUCCESS!')
