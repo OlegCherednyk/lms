@@ -6,33 +6,9 @@
      {{ form.as_p }}
     <input type="submit" value="Save"><br>
     </form>
-
-{% if group.student.all %}
-    <table border="1px">
-        <tr>
-          <th>ID</th>
-          <th>First name</th>
-          <th>Last name</th>
-          <th>Email</th>
-          <th>Group</th>
-            <th>✏</th>
-        </tr>
-        {% for student in group.student.all %}
-            <tr>
-              <td> {{ student.id }}</td>
-              <td> {{ student.first_name }}</td>
-              <td> {{ student.last_name }}</td>
-              <td> {{ student.email }}</td>
-              <td> {{ student.group.group_num }}</td>
-
-              <td> <a href="/students/edit/{{ student.id }}">EDIT</a></td>
-
-            </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    <p>Sorry, list is empty</p>
-{% endif %}
+{% with students_list=group.student.all %}
+    {% include 'includes/student_table.html' %}
+{% endwith %}
 
 {%endblock%}
 
