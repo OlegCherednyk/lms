@@ -10,7 +10,7 @@
               <td> {{ group.id }}</td>
               <td> {{ group.group_num }}</td>
 
-              <td> <a href="/group/edit/{{ group.id }}">EDIT</a></td>
+              <td> <a href="{% url 'group:edit' group.id %}">EDIT</a></td>
 
             </tr>
         {% endfor %}

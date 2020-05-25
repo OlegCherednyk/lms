@@ -1,72 +1,43 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
-from django.shortcuts import render
-
 # Create your views here.
 from django.urls import reverse
+from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 
 from teacher.forms import TeacherAddForm, TeacherEditForm
 from teacher.models import Teacher
 
 
-def teacher_list(request):
-    qs = Teacher.objects.all()
-    if request.GET.get("lname"):
-        qs = qs.filter(last_name=request.GET.get("lname"))
-    if request.GET.get("fname"):
-        qs = qs.filter(first_name=request.GET.get("fname"))
-    if request.GET.get("email"):
-        qs = qs.filter(email=request.GET.get("email"))
+class TeacherListView(ListView):
+    model = Teacher
+    template_name = 'teacher_list.html'
+    context_object_name = 'teacher_list'
 
-    return render(
-        request=request,
-        template_name="teacher_list.html",
-        context={'teacher_list': qs,
-                 'title': 'Teachers list'
-                 }
-    )
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['title'] = "Teacher list"
+        return context
 
 
-def teachers_add(request):
+class TeacherUpdateViews(UpdateView):
+    model = Teacher
+    template_name = 'teacher_edit.html'
+    form_class = TeacherEditForm
 
-    if request.method == 'POST':
-        form = TeacherAddForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('teacher'))
-    else:
-        form = TeacherAddForm()
-
-    return render(
-        request=request,
-        template_name="teachers_add.html",
-        context={'form': form,
-                 'title': 'Add teacher'
-                 }
-    )
+    def get_success_url(self):
+        return reverse('teacher:list')
 
 
-def teachers_edit(request, id):
-    try:
-        teacher = Teacher.objects.get(id=id)
-    except ObjectDoesNotExist:
-        return HttpResponseNotFound("Teacher with this id not exist ")
-    if request.method == 'POST':
-        form = TeacherEditForm(request.POST, instance=teacher)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('teacher'))
-        else:
-            return HttpResponse('Этот учитель   уже существует, попробуйте ещё раз ', status=409)
-    else:
-        form = TeacherEditForm(
-            instance=teacher
-        )
-    return render(
-        request=request,
-        template_name="teacher_edit.html",
-        context={'form': form,
-                 'teacher': teacher,
-                 'title': 'Edit teacher'
-                 }
-    )
+class TeacherCreateViews(CreateView):
+    model = Teacher
+    template_name = 'teacher_add.html'
+    form_class = TeacherAddForm
+
+    def get_success_url(self):
+        return reverse('teacher:list')
+
+
+class TeacherDeleteViews(DeleteView):
+    model = Teacher
+    template_name = 'teacher_del.html'
+
+    def get_success_url(self):
+        return reverse('teacher:list')

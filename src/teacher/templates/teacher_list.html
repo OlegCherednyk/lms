@@ -13,8 +13,9 @@
 
 {% for teacher in teacher_list %}
     {{teacher.id}}
-    <a href = "/teacher/edit/{{teacher.id}}">{{teacher.first_name}} {{teacher.last_name}}</a>
+    <a href = "{% url 'teacher:edit' teacher.id %}">{{teacher.first_name}} {{teacher.last_name}}</a>
     {{teacher.email}}
+    <a href = "{% url 'teacher:del' teacher.id %}">DELETE</a>
     <br>
     {%empty%}
     <p>Sorry,list is empty</p>
