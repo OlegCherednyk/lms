@@ -6,5 +6,9 @@
      {{ form.as_p }}
     <input type="submit" value="Save"><br>
     </form>
+{% with students_list=group.student.all %}
+    {% include 'includes/student_table.html' %}
+{% endwith %}
+
 {%endblock%}
 

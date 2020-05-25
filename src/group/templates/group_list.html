@@ -7,13 +7,6 @@
     <input type="submit" value="Search"><br>
 </form>
 
-{% for group in group_list %}
-    {{group.id}}
-    <a href = "/group/edit/{{group.id}}">{{group.group_num}}</a>
-    {{group.teachers}}
-    <br>
-    {%empty%}
-    <p>Sorry,list is empty</p>
-{% endfor %}
+{% include 'includes/group_table.html' %}
 
 {%endblock%}

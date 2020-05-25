@@ -11,14 +11,6 @@
     <input type="submit" value="Search"><br>
 </form>
 
-{% for student in students_list %}
-    {{student.id}}
-    <a href = "/students/edit/{{student.id}}">{{student.first_name}} {{student.last_name}}</a>
-    {{student.email}}
-    {{student.group}}
-    <br>
-    {%empty%}
-    <p>Sorry,list is empty</p>
-{% endfor %}
+{% include 'includes/student_table.html' %}
 
 {%endblock%}
