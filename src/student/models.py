@@ -17,6 +17,9 @@ class Student(models.Model):
     phone_number = models.CharField(max_length=25, null=False)
     group = models.ForeignKey(to=Group, null=True, on_delete=models.SET_NULL, related_name='student')
 
+    def full_name(self):
+        return self.first_name, self.last_name
+
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.email} {self.phone_number} {self.group}'
 

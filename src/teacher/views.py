@@ -11,6 +11,19 @@ class TeacherListView(ListView):
     template_name = 'teacher_list.html'
     context_object_name = 'teacher_list'
 
+    def get_queryset(self):
+        request = self.request
+        qs = super().get_queryset()
+        qs = qs.order_by('-id')
+
+        if request.GET.get('fname'):
+            qs = qs.filter(first_name=request.GET.get('fname'))
+
+        if request.GET.get('lname'):
+            qs = qs.filter(last_name=request.GET.get('lname'))
+
+        return qs
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
         context['title'] = "Teacher list"

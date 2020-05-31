@@ -2,20 +2,26 @@
 
 {%block content%}
 <form>
-  <label for="fname">First name:</label><br>
-    <input type="text" id="fname" name="fname"><br>
-  <label for="lname">Last name:</label><br>
-  <input type="text" id="lname" name="lname"><br>
-    <label for="email">Email:</label><br>
-  <input type="text" id="email" name="email"><br>
-    <input type="submit" value="Search"><br>
-</form>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">First name</span>
+          </div>
+          <input  name="fname" type="text" class="form-control" placeholder="First name" aria-label="firstname" aria-describedby="basic-addon1">
+
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">Last name</span>
+          </div>
+          <input  name="lname" type="text" class="form-control" placeholder="Last name" aria-label="lastname" aria-describedby="basic-addon1">
+
+          <button type="submit" class="btn btn-info">Search</button>
+        </div>
+    </form>
 
 {% for teacher in teacher_list %}
     {{teacher.id}}
     <a href = "{% url 'teacher:edit' teacher.id %}">{{teacher.first_name}} {{teacher.last_name}}</a>
     {{teacher.email}}
-    <a href = "{% url 'teacher:del' teacher.id %}">DELETE</a>
+    <a href = "{% url 'teacher:del' teacher.id %}" class="btn btn-danger">DEL</a>
     <br>
     {%empty%}
     <p>Sorry,list is empty</p>
