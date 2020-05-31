@@ -30,6 +30,7 @@ class StudentEditForm(ModelForm):
             raise ValidationError('This person already exists')
         return self.cleaned_data
 
+
 class StudentDelForm(ModelForm):
     class Meta:
         model = Student
