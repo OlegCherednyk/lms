@@ -16,10 +16,6 @@ class StudentAdminModel(admin.ModelAdmin):
         return qs
 
 
-class TeacherAdminModel(admin.ModelAdmin):
-    fields = ('first_name', 'last_name', 'email')
-    list_display = ('first_name', 'last_name', 'email')
-
 
 admin.site.register(Student, StudentAdminModel)
-admin.site.register(Teacher, TeacherAdminModel)
+
