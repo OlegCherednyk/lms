@@ -37,12 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_extensions',
+    'debug_toolbar',
     'crispy_forms',
+    
     'teacher',
     'student',
     'group',
-    'django_extensions',
-    'debug_toolbar'
+    'user_account',
 
 ]
 
@@ -62,7 +65,7 @@ ROOT_URLCONF = 'app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,5 +132,6 @@ STATIC_URL = '/static/'
 
 INTERNAL_IPS = [
     '127.0.0.1',
-
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

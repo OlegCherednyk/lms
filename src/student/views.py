@@ -1,3 +1,4 @@
+
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
@@ -21,8 +22,17 @@ class StudentsListView(ListView):
     context_object_name = 'students_list'
 
     def get_queryset(self):
+        request = self.request
         qs = super().get_queryset()
-        qs = qs.select_related("group")
+        qs = qs.select_related('group')
+        qs = qs.order_by('-id')
+
+        if request.GET.get('fname'):
+            qs = qs.filter(first_name=request.GET.get('fname'))
+
+        if request.GET.get('lname'):
+            qs = qs.filter(last_name=request.GET.get('lname'))
+
         return qs
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -38,6 +48,11 @@ class StudentsUpdateViews(UpdateView):
 
     def get_success_url(self):
         return reverse('students:list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+        context['title'] = "Edit student"
+        return context
 
 
 class StudentsCreateViews(CreateView):
