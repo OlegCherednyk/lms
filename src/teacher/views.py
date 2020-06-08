@@ -1,15 +1,17 @@
 # Create your views here.
-from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 
 from teacher.forms import TeacherAddForm, TeacherEditForm
 from teacher.models import Teacher
 
 
-class TeacherListView(ListView):
+class TeacherListView(LoginRequiredMixin, ListView):
     model = Teacher
     template_name = 'teacher_list.html'
     context_object_name = 'teacher_list'
+    login_url = reverse_lazy('login')
 
     def get_queryset(self):
         request = self.request
