@@ -29,19 +29,21 @@ class GroupListView(LoginRequiredMixin, ListView):
         return context
 
 
-class GroupUpdateViews(UpdateView):
+class GroupUpdateViews(LoginRequiredMixin, UpdateView):
     model = Group
     template_name = 'group_edit.html'
     form_class = GroupEditForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('group:list')
 
 
-class GroupCreateViews(CreateView):
+class GroupCreateViews(LoginRequiredMixin, CreateView):
     model = Group
     template_name = 'group_add.html'
     form_class = GroupAddForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('group:list')

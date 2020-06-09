@@ -43,10 +43,11 @@ class StudentsListView(LoginRequiredMixin, ListView):
         return context
 
 
-class StudentsUpdateViews(UpdateView):
+class StudentsUpdateViews(LoginRequiredMixin, UpdateView):
     model = Student
     template_name = 'students_edit.html'
     form_class = StudentEditForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('students:list')
@@ -57,16 +58,17 @@ class StudentsUpdateViews(UpdateView):
         return context
 
 
-class StudentsCreateViews(CreateView):
+class StudentsCreateViews(LoginRequiredMixin, CreateView):
     model = Student
     template_name = 'students_add.html'
     form_class = StudentAddForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('students:list')
 
 
-class StudentsDeleteView(DeleteView):
+class StudentsDeleteView(LoginRequiredMixin, DeleteView):
     model = Student
     template_name = 'students_del.html'
 

@@ -32,27 +32,30 @@ class TeacherListView(LoginRequiredMixin, ListView):
         return context
 
 
-class TeacherUpdateViews(UpdateView):
+class TeacherUpdateViews(LoginRequiredMixin, UpdateView):
     model = Teacher
     template_name = 'teacher_edit.html'
     form_class = TeacherEditForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('teacher:list')
 
 
-class TeacherCreateViews(CreateView):
+class TeacherCreateViews(LoginRequiredMixin, CreateView):
     model = Teacher
     template_name = 'teacher_add.html'
     form_class = TeacherAddForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('teacher:list')
 
 
-class TeacherDeleteViews(DeleteView):
+class TeacherDeleteViews(LoginRequiredMixin, DeleteView):
     model = Teacher
     template_name = 'teacher_del.html'
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('teacher:list')
