@@ -1,15 +1,17 @@
 # Create your views here.
-from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, CreateView, DeleteView, ListView
 
 from teacher.forms import TeacherAddForm, TeacherEditForm
 from teacher.models import Teacher
 
 
-class TeacherListView(ListView):
+class TeacherListView(LoginRequiredMixin, ListView):
     model = Teacher
     template_name = 'teacher_list.html'
     context_object_name = 'teacher_list'
+    login_url = reverse_lazy('login')
 
     def get_queryset(self):
         request = self.request
@@ -30,27 +32,30 @@ class TeacherListView(ListView):
         return context
 
 
-class TeacherUpdateViews(UpdateView):
+class TeacherUpdateViews(LoginRequiredMixin, UpdateView):
     model = Teacher
     template_name = 'teacher_edit.html'
     form_class = TeacherEditForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('teacher:list')
 
 
-class TeacherCreateViews(CreateView):
+class TeacherCreateViews(LoginRequiredMixin, CreateView):
     model = Teacher
     template_name = 'teacher_add.html'
     form_class = TeacherAddForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('teacher:list')
 
 
-class TeacherDeleteViews(DeleteView):
+class TeacherDeleteViews(LoginRequiredMixin, DeleteView):
     model = Teacher
     template_name = 'teacher_del.html'
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('teacher:list')

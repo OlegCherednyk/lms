@@ -1,15 +1,17 @@
 # Create your views here.
-from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView
 
 from group.forms import GroupAddForm, GroupEditForm
 from group.models import Group
 
 
-class GroupListView(ListView):
+class GroupListView(LoginRequiredMixin, ListView):
     model = Group
     template_name = 'group_list.html'
     context_object_name = 'group_list'
+    login_url = reverse_lazy('login')
 
     def get_queryset(self):
         request = self.request
@@ -27,19 +29,21 @@ class GroupListView(ListView):
         return context
 
 
-class GroupUpdateViews(UpdateView):
+class GroupUpdateViews(LoginRequiredMixin, UpdateView):
     model = Group
     template_name = 'group_edit.html'
     form_class = GroupEditForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('group:list')
 
 
-class GroupCreateViews(CreateView):
+class GroupCreateViews(LoginRequiredMixin, CreateView):
     model = Group
     template_name = 'group_add.html'
     form_class = GroupAddForm
+    login_url = reverse_lazy('login')
 
     def get_success_url(self):
         return reverse('group:list')
