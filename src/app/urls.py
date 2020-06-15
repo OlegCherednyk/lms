@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import include, path
 from django.views.generic import TemplateView
 from django.contrib import admin
@@ -31,6 +32,9 @@ urlpatterns = [
 
     path('account/', include("user_account.urls")),
 ]
+
+urlpatterns += \
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar
