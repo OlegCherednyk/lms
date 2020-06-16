@@ -1,12 +1,8 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {%block content%}
-{% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li class="{{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-  </ul>
+
+{% include 'includes/messages.html' %}
 
 {% endif %}
 <form method="post" enctype="multipart/form-data">

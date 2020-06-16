@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 
 {%block content%}
-  <ul class="messages">
-    {% for message in messages %}
-      <li class="{{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-  </ul>
+{% include 'includes/messages.html' %}
 <form>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
